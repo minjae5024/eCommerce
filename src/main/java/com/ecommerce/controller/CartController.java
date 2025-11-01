@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,7 +25,7 @@ public class CartController {
 
     @Operation(
             summary = "장바구니 상품 추가",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true, content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"productId\": 1, \"quantity\": 1}")
@@ -48,7 +47,7 @@ public class CartController {
 
     @Operation(
             summary = "장바구니 상품 수량 업데이트",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"quantity\": 2}")

@@ -9,14 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -31,7 +28,7 @@ public class ProductController {
 
     @Operation(
             summary = "상품 등록",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true, content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"name\": \"Test Product\", \"description\": \"This is a test product.\", \"price\": 10000, \"stock\": 100}")
@@ -60,7 +57,7 @@ public class ProductController {
 
     @Operation(
             summary = "상품 정보 업데이트",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true, content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"name\": \"Updated Product\", \"description\": \"This is an updated product.\", \"price\": 12000, \"stock\": 150}")

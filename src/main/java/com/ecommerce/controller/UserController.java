@@ -16,12 +16,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -39,7 +39,7 @@ public class UserController {
 
     @Operation(
             summary = "로그인",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true, content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"email\": \"admin@admin.com\", \"password\": \"admin\"}")
@@ -75,7 +75,7 @@ public class UserController {
 
     @Operation(
             summary = "사용자 회원가입",
-            requestBody = @RequestBody(
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true, content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"email\": \"1q2w3e4r@example.com\", \"password\": \"1q2w3e4r\", \"username\": \"1q2w3e4r\"}")

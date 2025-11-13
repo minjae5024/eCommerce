@@ -2,9 +2,9 @@
 
 ## 1. 프로젝트 소개
 
-실제 운영 및 확장성을 고려하여 설계한 이커머스 API입니다.
+상품 CRUD 기능으로 시작해 인증, 장바구니, 주문, 포인트 결제 등 이커머스 서비스에 필요한 기능을 구현했습니다. 
 
-이 프로젝트는 단순히 상품을 판매하는 API를 구현하는 것을 넘어 신입 개발자로서 마주할 수 있는 과제들을 해결하기 위해 집중했습니다. **안전한 사용자 인증 시스템 구축, 데이터 무결성을 보장하는 트랜잭션 관리, 클라우드 인프라 설계, 그리고 수많은 트러블슈팅을 거친 CI/CD 파이프라인 구축** 등 백엔드 엔지니어의 핵심 역량을 고민했습니다.
+**동시성 이슈 해결, CI/CD 파이프라인 구축** 등을 진행하며 실제 이커머스 환경의 문제를 경험하기 위해 고민했습니다.
 
 ---
 
@@ -16,17 +16,17 @@
 
 ## 2. 주요 기능
 
-- **사용자 인증**: JWT(JSON Web Token)와 Spring Security를 이용한 안전한 API 기반 회원가입 및 로그인 기능을 제공합니다.
-- **상품 관리**: 관리자와 일반 사용자의 권한을 분리하여 관리자만 상품을 등록, 수정, 삭제할 수 있는 기능을 구현했습니다.
-- **장바구니**: 로그인한 사용자가 원하는 상품을 담고, 수량을 변경하고, 삭제하는 등의 장바구니 기능을 제공합니다.
-- **주문 및 결제**: 장바구니의 상품들을 기반으로 주문을 생성하고, 사용자의 내부 포인트를 이용한 결제 시뮬레이션 기능을 구현했습니다.
+- **상품 관리**: 상품을 등록, 수정, 삭제할 수 있는 기능을 구현했습니다.
+- **사용자 인증**: JWT 기반의 회원가입 및 로그인 기능을 제공합니다.
+- **장바구니**: 원하는 상품을 담고, 수량을 변경하고, 삭제하는 등의 장바구니 기능을 제공합니다.
+- **주문 및 결제**: 장바구니의 상품으로 주문을 생성하고, 내부 포인트를 이용한 결제 기능을 구현했습니다.
 - 
 ## 3. 적용 기술 및 개발 환경
 
-- **Backend**: `Java 21`, `Spring Boot 3.x`, `Spring Security`, `Spring Data JPA`
+- **Backend**: `Java`, `Spring Boot`, `Spring Security`, `Spring Data JPA`
 - **Database**: `MySQL`
-- **Build Tool**: `Gradle`
-- **Infrastructure & DevOps**: `GitHub Actions`, `AWS EC2`, `AWS RDS`
+- **DevOps**: `GitHub Actions`, `AWS EC2`, `AWS RDS`
+- - **Test**: `JUnit 5`, `Mockito`
 
 ## 4. API 명세
 
@@ -76,49 +76,63 @@
 ## 5. 테스트 가이드
 
 - **테스트 계정 (ADMIN)**: `admin@admin.com` / `admin`
-  - 애플리케이션 시작 시 자동으로 생성되는 관리자 계정입니다.
-  - 이 계정으로 로그인하여 상품 등록 등 관리자 전용 API를 테스트할 수 있습니다.
+  - 테스트 관리자 계정입니다.
+  - 상품 등록 등 관리자 전용 API를 테스트할 수 있습니다.
 
 - **초기 데이터**: 
   - **상품**: `testProduct` (price: 1000, stock: 1000)가 기본으로 생성되어 있습니다.
-  - **포인트**: 모든 사용자는 회원가입 시 **1,000,000 포인트**가 기본으로 지급되어, 충분한 결제 테스트가 가능합니다.
+  - **포인트**: 모든 사용자는 회원가입 시 **1,000,000 포인트**가 기본적으로 지급됩니다.
 
 - **테스트 방법**:
   1.  `/api/users/login` API를 통해 로그인하고 `accessToken`을 발급받습니다.
-  2.  인증이 필요한 API는 HTTP 요청 헤더에 `Authorization: Bearer {accessToken}`을 포함하여 호출합니다. (Swagger 사용 시 초록색 **Authorize** 버튼을 눌러 Value에 Bearer + " " + <accessToken> 입력)
+  2.  인증이 필요한 API는 HTTP 요청 헤더에 `Authorization: Bearer {accessToken}`을 포함하여 호출합니다. (Swagger 사용 시 우측 상단의 **Authorize** 버튼을 눌러 <accessToken> 입력)
  
 ## 6. 전체 시스템 아키텍처
 
 <details>
-<summary><b>클릭하여 아키텍처 확인하기</b></summary>
-
-개발부터 배포, 서비스 운영까지의 전체 흐름을 나타내는 아키텍처 다이어그램입니다.
+<summary><b>아키텍처 확인</b></summary>
 
 ```mermaid
-graph TD
+graph LR
 
-    subgraph CICD
-        A[개발자] -->|1. Git Push| B[GitHub 저장소]
-        B -->|2. 트리거| C{GitHub Actions}
+  subgraph 사용자
+    A[🧑 사용자]
+  end
 
-        subgraph 파이프라인
-            C -->|3. 빌드| D[.jar 생성]
-            D -->|4. 배포| E[EC2로 전송]
-        end
+  subgraph 인프라 [인프라 - 🗄️AWS EC2]
+    E2[GitHub Actions]
+    
+    subgraph 서버 [Spring Boot 서버]
+      B1[인증 API]
+      B2[상품 API]
+      B3[장바구니 API]
+      B4[주문 API]
+      B5[결제 API]
     end
 
-    subgraph AWS
-        F[EC2] -->|DB 연결| G[RDS MySQL]
+    subgraph 서비스
+      C1[AuthService]
+      C2[ProductService]
+      C3[CartService]
+      C4[OrderService]
+      C5[PaymentService]
     end
+  end
 
-    E -->|SSH| F
+  subgraph 데이터베이스
+    D1[(MySQL RDS)]
+  end
 
-    subgraph 사용자
-        I[사용자] -->|API 요청| F
-    end
+  %% 사용자 요청 흐름
+  A -->|로그인/회원가입| B1 --> C1 --> D1
+  A -->|상품 조회/관리| B2 --> C2 --> D1
+  A -->|장바구니 추가/조회| B3 --> C3 --> D1
+  A -->|주문 생성/조회| B4 --> C4 --> D1
+  A -->|포인트 결제| B5 --> C5 --> D1
 
-    style F fill:#FF9900,stroke:#333,stroke-width:2px
-    style G fill:#0073BB,stroke:#333,stroke-width:2px
+  %% 배포 흐름
+  E2 --> 서버
+
 ```
 
 </details>

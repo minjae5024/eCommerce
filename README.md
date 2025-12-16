@@ -25,7 +25,7 @@
 
 - **Backend**: `Java`, `Spring Boot`, `Spring Security`, `Spring Data JPA`
 - **Database**: `MySQL`
-- **DevOps**: `GitHub Actions`, `AWS EC2`, `AWS RDS`
+- **DevOps**: `GitHub Actions`, ~~`AWS EC2`~~, ~~`AWS RDS`~~ -> 홈 서버로 마이그레이션 완료
 - - **Test**: `JUnit 5`, `Mockito`
 
 ## 4. API 명세

@@ -95,44 +95,29 @@
 ```mermaid
 graph LR
 
-  subgraph 사용자
-    A[🧑 사용자]
+  DEV[개발자]
+  USER[사용자]
+
+  subgraph CF[Cloudflare]
+    C2[Cloudflare Tunnel]
   end
 
-  subgraph 인프라 [인프라 - 🗄️AWS EC2]
-    E2[GitHub Actions]
-    
-    subgraph 서버 [Spring Boot 서버]
-      B1[인증 API]
-      B2[상품 API]
-      B3[장바구니 API]
-      B4[주문 API]
-      B5[결제 API]
-    end
-
-    subgraph 서비스
-      C1[AuthService]
-      C2[ProductService]
-      C3[CartService]
-      C4[OrderService]
-      C5[PaymentService]
-    end
+  subgraph GH[GitHub]
+    G1[Repository]
+    G2[GitHub Actions]
+    G3[Tailscale]
   end
 
-  subgraph 데이터베이스
-    D1[(MySQL RDS)]
+  subgraph HS[홈 서버]
+    S1[E-Commerce]
+    D1[MySQL]
   end
 
-  %% 사용자 요청 흐름
-  A -->|로그인/회원가입| B1 --> C1 --> D1
-  A -->|상품 조회/관리| B2 --> C2 --> D1
-  A -->|장바구니 추가/조회| B3 --> C3 --> D1
-  A -->|주문 생성/조회| B4 --> C4 --> D1
-  A -->|포인트 결제| B5 --> C5 --> D1
+  DEV -->|push| G1
+  G1 --> G2 --> G3 --> S1
 
-  %% 배포 흐름
-  E2 --> 서버
-
+  S1 --> CF --> USER
+  D1 --> S1
 ```
 
 </details>

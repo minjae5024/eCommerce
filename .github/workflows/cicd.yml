@@ -56,7 +56,6 @@ jobs:
           script: |
             cd /home/${{ secrets.HOME_USERNAME }}/ecommerce
             mv -f eCommerce-0.0.1-SNAPSHOT.jar ecommerce.jar
-            chown ${{ secrets.HOME_USERNAME }}:${{ secrets.HOME_USERNAME }} ecommerce.jar
-            chmod 644 ecommerce.jar
+            sudo chown ${{ secrets.HOME_USERNAME }}:${{ secrets.HOME_USERNAME }} ecommerce.jar
+            sudo chmod +x ecommerce.jar
             sudo systemctl restart ecommerce.service
-            sudo systemctl --no-pager --full status ecommerce.service
